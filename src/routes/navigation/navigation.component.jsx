@@ -2,13 +2,18 @@ import { Outlet, Link } from 'react-router-dom'
 import { Fragment, useContext } from 'react'
 import { ReactComponent as CrwnLogo } from '../../assets/crown.svg'
 import { UserContext } from '../../contexts/user.context'
+import { CartContext } from '../../contexts/cart.context'
 import { signOutUser } from '../../utils/firebase/firebase.utils'
 
+import CartIcon from '../../components/cart-icon/cart-icon.component'
+
 import './navigation.styles.scss'
+import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component'
 
 const Navigation = () => {
   //Calls currentUser value, not setter like in the sign-in component
   const { currentUser, setCurrentUser } = useContext(UserContext)
+  const { isCartOpen } = useContext(CartContext)
 
   return (
     <Fragment>
@@ -31,7 +36,10 @@ const Navigation = () => {
               SIGN IN
             </Link>
           )}
+          <CartIcon className='nav-link' />
         </div>
+        {isCartOpen && <CartDropdown />}
+        {/* The double && (short circuit operator) means that if the total line above evalutes to true (components can be truthy thats why they are functional components) then display the component CartDropdown, if not show nothing */}
       </div>
       <Outlet />
     </Fragment>

@@ -19,6 +19,7 @@ export const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null)
   const value = { currentUser, setCurrentUser }
 
+  //Use effect is used so that the listener is mounted just once and can only be mounted when the dependent is set. In this case there is none
   useEffect(() => {
     const unsubscribe = onAuthStateChangedListener((user) => {
       if (user) {
