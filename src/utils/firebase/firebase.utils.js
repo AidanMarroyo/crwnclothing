@@ -14,7 +14,16 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth'
 
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore'
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  getDocs,
+  query,
+} from 'firebase/firestore'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -47,7 +56,47 @@ export const signInWithGoogleRedirect = () =>
 
 export const db = getFirestore()
 
-//Creates the collection
+//Creates the collection of product categories
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  //uses to the collection method to state that we are creating a new collection in the selected db
+  const collectionRef = collection(db, collectionKey)
+
+  // this batch call writes a batch to the db we've selected
+  const batch = writeBatch(db)
+
+  //multiple set events based on the amount of objects (forEach)
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase())
+    batch.set(docRef, object)
+  })
+
+  await batch.commit()
+  console.log('done')
+}
+
+//Getting categories
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, 'categories')
+
+  //Generates a query based on this collection reference (collectionRef)
+  const q = query(collectionRef)
+
+  //^ Gives an object to snapshot. Fetches those document snapshots
+  const querySnapshot = await getDocs(q)
+
+  //Reduces over the querySnapshot array to end up with an object
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data()
+    acc[title.toLowerCase()] = items
+    return acc
+  }, {})
+  return categoryMap
+}
+
+//Creates the collection of users
 export const createUserDocumentFromAuth = async (
   userAuth,
   additionalInformation = {}

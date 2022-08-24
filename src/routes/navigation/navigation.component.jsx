@@ -7,8 +7,13 @@ import { signOutUser } from '../../utils/firebase/firebase.utils'
 
 import CartIcon from '../../components/cart-icon/cart-icon.component'
 
-import './navigation.styles.scss'
 import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component'
+import {
+  NavigationContainer,
+  LogoContainer,
+  NavLinksContainer,
+  NavLink,
+} from './navigation.styles.jsx'
 
 const Navigation = () => {
   //Calls currentUser value, not setter like in the sign-in component
@@ -17,30 +22,26 @@ const Navigation = () => {
 
   return (
     <Fragment>
-      <div className='navigation'>
-        <Link className='logo-container' to='/'>
+      <NavigationContainer>
+        <LogoContainer to='/'>
           <CrwnLogo className='logo' />
-        </Link>
-        <div className='nav-links-container'>
-          <Link className='nav-link' to='/shop'>
-            SHOP
-          </Link>
+        </LogoContainer>
+        <NavLinksContainer>
+          <NavLink to='/shop'>SHOP</NavLink>
 
           {/* This says that if there is a currentUser signed in then change to 'SIGN OUT' if there is no logged in user, display 'SIGN IN' */}
           {currentUser ? (
-            <span className='nav-link' onClick={signOutUser}>
+            <NavLink as='span' onClick={signOutUser}>
               SIGN OUT
-            </span>
+            </NavLink>
           ) : (
-            <Link className='nav-link' to='/auth'>
-              SIGN IN
-            </Link>
+            <NavLink to='/auth'>SIGN IN</NavLink>
           )}
           <CartIcon className='nav-link' />
-        </div>
+        </NavLinksContainer>
         {isCartOpen && <CartDropdown />}
         {/* The double && (short circuit operator) means that if the total line above evalutes to true (components can be truthy thats why they are functional components) then display the component CartDropdown, if not show nothing */}
-      </div>
+      </NavigationContainer>
       <Outlet />
     </Fragment>
   )

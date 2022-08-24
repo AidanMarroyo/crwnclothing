@@ -13,7 +13,7 @@ const App = () => {
         {/* index is the component that displays with the parent component when the
         path is '/' */}
 
-        <Route path='shop' element={<Shop />} />
+        <Route path='shop/*' element={<Shop />} />
         <Route path='auth' element={<Authentication />} />
         <Route path='checkout' element={<Checkout />} />
       </Route>

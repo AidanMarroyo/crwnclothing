@@ -1,10 +1,9 @@
-import './form-input.styles.scss'
+import { FormInputLabel, Input, Group } from './form-input.styles'
 
 const FormInput = ({ label, ...otherProps }) => {
   return (
-    <div className='group'>
-      <input
-        className='form-input'
+    <Group>
+      <Input
         {...otherProps}
         //   type='text'
         //   required
@@ -12,19 +11,15 @@ const FormInput = ({ label, ...otherProps }) => {
         //   name='displayName'
         //   value={displayName}
         //   commented out props replaced by {...otherProps} which spreads out all remaining props found in sign up form component
-      ></input>
+      ></Input>
 
       {/* This states: if label tag exists, then render the following:  */}
       {label && (
-        <label
-          className={
-            `${otherProps.value.length > 0 ? 'shrink' : ''} form-input-label` //Label className is a dynamic class that states if the otherProps value length is greater than 0, then append the className 'shrink' to list of classNames
-          }
-        >
+        <FormInputLabel shrink={otherProps.value.length}>
           {label}
-        </label>
+        </FormInputLabel>
       )}
-    </div>
+    </Group>
   )
 }
 
